@@ -13,3 +13,6 @@ documentation = "https://docs.rs/embedded-storage"
 readme = "README.md"
 keywords = ["storage"]
 categories = ["embedded", "hardware-support", "no-std"]
+
+[dependencies]
+tracing = { version = "0.1", default_features = false }

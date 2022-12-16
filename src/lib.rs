@@ -8,6 +8,9 @@
 #![deny(missing_docs)]
 #![deny(unsafe_code)]
 
+#[macro_use]
+extern crate tracing;
+
 /// Currently contains [`OverlapIterator`]
 pub mod iter;
 /// Technology specific traits for NOR Flashes
