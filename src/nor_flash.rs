@@ -318,7 +318,7 @@ where
             .map(move |i| Page::new(i, S::ERASE_SIZE))
             .overlaps(bytes, offset)
         {
-            let offset_into_page = addr.saturating_sub(page.start) as usize;
+            let _offset_into_page = addr.saturating_sub(page.start) as usize;
 
             self.storage
                 .read(page.start, &mut self.merge_buffer[..S::ERASE_SIZE])?;
@@ -327,11 +327,14 @@ where
             // info!("addr: {:x} -> page {:x}, offset {:x}", addr, page.start, offset);
 
             let aligned_start = (offset / S::WRITE_SIZE) * S::WRITE_SIZE;
-            let aligned_end = aligned_start
-                + (data.len() / S::WRITE_SIZE + (data.len() % S::WRITE_SIZE != 0) as usize)
-                    * S::WRITE_SIZE;
+            let aligned_end = ((offset + data.len() + S::WRITE_SIZE - 1) / S::WRITE_SIZE) * S::WRITE_SIZE;
 
-            // info!("aligned_start: {:x}, aligned_end: {:x}", aligned_start, aligned_end);
+                // aligned_start
+                // + (data.len() / S::WRITE_SIZE + (data.len() % S::WRITE_SIZE != 0) as usize)
+                //     * S::WRITE_SIZE;
+
+            // error!("aligned_start: {:x}, aligned_end: {:x}", aligned_start, aligned_end);
+            // error!("offset: {:x}, data len: {:x}", offset, data.len());
 
             // let aligned_end = data.len() % S::WRITE_SIZE + offset + data.len();
 
@@ -356,7 +359,7 @@ where
                 }
             }
             if erase_all {
-                // warn!("erasing page: {:x}", page.start);
+                warn!("erasing page: {:x}", page.start);
                 self.storage.erase(page.start, page.end())?;
 
                 self.merge_buffer[offset..offset + data.len()].copy_from_slice(data);
